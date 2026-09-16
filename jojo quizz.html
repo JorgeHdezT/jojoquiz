@@ -1,502 +1,656 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JoJo's Bizarre Personality Test</title>
-  <!-- Fuente temática tipo manga/cómic de Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:ital,wght@0,400;0,700;1,900&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JoJo's Bizarre Personality Test</title>
+    <!-- Fuente temática tipo manga/cómic de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:ital,wght@0,400;0,700;1,900&display=swap"
+      rel="stylesheet"
+    />
 
-  <style>
-    /* ===================================================
+    <style>
+      /* ===================================================
        ESTILOS TEMÁTICOS (JoJo's Bizarre Aesthetic)
        =================================================== */
-    :root {
-      --bg-color: #1a0826;
-      --card-bg: #2a0e3f;
-      --accent-yellow: #ffe600;
-      --accent-pink: #ff007f;
-      --accent-purple: #8a2be2;
-      --text-color: #ffffff;
-      --font-title: 'Bangers', cursive;
-      --font-body: 'Montserrat', sans-serif;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: var(--font-body);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-image: 
-        radial-gradient(circle at 20% 20%, rgba(255, 0, 127, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(255, 230, 0, 0.15) 0%, transparent 40%);
-      padding: 20px;
-    }
-
-    .container {
-      background: var(--card-bg);
-      border: 4px solid var(--accent-yellow);
-      box-shadow: 10px 10px 0px var(--accent-pink);
-      border-radius: 12px;
-      width: 100%;
-      max-width: 650px;
-      padding: 30px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    h1 {
-      font-family: var(--font-title);
-      font-size: 2.8rem;
-      letter-spacing: 2px;
-      color: var(--accent-yellow);
-      text-shadow: 3px 3px 0px var(--accent-pink);
-      margin-bottom: 10px;
-      text-transform: uppercase;
-    }
-
-    p.subtitle {
-      font-size: 1.1rem;
-      margin-bottom: 25px;
-      color: #ddd;
-    }
-
-    /* Barra de progreso */
-    .progress-bar-container {
-      width: 100%;
-      height: 12px;
-      background-color: #11031b;
-      border-radius: 6px;
-      margin-bottom: 25px;
-      overflow: hidden;
-      border: 1px solid var(--accent-yellow);
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent-pink), var(--accent-yellow));
-      transition: width 0.4s ease;
-    }
-
-    /* Preguntas y Opciones */
-    .question-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-      min-height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .options-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .btn-option {
-      background: #11031b;
-      color: #fff;
-      border: 2px solid var(--accent-purple);
-      padding: 14px 20px;
-      font-size: 1rem;
-      font-family: var(--font-body);
-      font-weight: 700;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: left;
-    }
-
-    .btn-option:hover {
-      background-color: var(--accent-purple);
-      border-color: var(--accent-yellow);
-      transform: translateX(5px);
-      box-shadow: -4px 4px 0px var(--accent-pink);
-    }
-
-    /* Pantalla de Resultado */
-    .result-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      animation: fadeIn 0.8s ease-in-out;
-    }
-
-    .result-title {
-      font-family: var(--font-title);
-      font-size: 3rem;
-      color: var(--accent-yellow);
-      text-shadow: 4px 4px 0px var(--accent-pink);
-      margin: 15px 0;
-    }
-
-    /* Estilo especial para el camino secreto: DIO */
-    .result-card.dio .result-title {
-      color: #ff0000;
-      text-shadow: 4px 4px 0px #000;
-    }
-
-    /* Contenedor preparado para tus imágenes */
-    .character-image-container {
-      width: 100%;
-      max-width: 320px;
-      height: 250px;
-      border: 3px dashed var(--accent-yellow);
-      border-radius: 8px;
-      margin: 15px 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: rgba(0,0,0,0.3);
-      overflow: hidden;
-    }
-
-    .character-image-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .result-description {
-      font-size: 1.05rem;
-      line-height: 1.6;
-      margin-bottom: 25px;
-      text-align: justify;
-    }
-
-    .btn-reset {
-      background: var(--accent-pink);
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      font-family: var(--font-title);
-      font-size: 1.3rem;
-      letter-spacing: 1px;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 3px 3px 0px var(--accent-yellow);
-      transition: transform 0.1s;
-    }
-
-    .btn-reset:hover {
-      transform: scale(1.05);
-    }
-
-    .menacing-text {
-      position: absolute;
-      font-family: var(--font-title);
-      font-size: 2rem;
-      color: rgba(255, 0, 127, 0.2);
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .m-1 { top: 10px; left: 15px; }
-    .m-2 { bottom: 10px; right: 15px; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .hidden {
-      display: none !important;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-    <span class="menacing-text m-1">ゴゴゴ</span>
-    <span class="menacing-text m-2">ゴゴゴ</span>
-
-    <!-- PANTALLA DEL TEST -->
-    <div id="quiz-screen">
-      <h1>¿Qué JoJo Eres?</h1>
-      <p class="subtitle">Descubre el linaje o el destino que guía tu espíritu de lucha</p>
-
-      <div class="progress-bar-container">
-        <div class="progress-bar" id="progress-bar"></div>
-      </div>
-
-      <div class="question-title" id="question-text">Cargando pregunta...</div>
-
-      <div class="options-grid" id="options-container">
-        <!-- Opciones generadas por JS -->
-      </div>
-    </div>
-
-    <!-- PANTALLA DE RESULTADOS -->
-    <div id="result-screen" class="result-card hidden">
-      <p style="text-transform: uppercase; letter-spacing: 2px; color: var(--accent-pink); font-weight: bold;">Tu destino ha sido revelado</p>
-      
-      <h2 class="result-title" id="character-name">NOMBRE PERSONAJE</h2>
-
-      <!-- ================================================================= -->
-      <!-- ZONA PARA TUS ILUSTRACIONES Y FOTOS DE PERSONAJES                -->
-      <!-- ================================================================= -->
-      <div class="character-image-container" id="image-box">
-        
-        
-        
-        <img id="img-jonathan" src="/jojoimages/0.png" alt="Jonathan Joestar" class="hidden">
-        <img id="img-joseph" src="/jojoimages/1.png" alt="Joseph Joestar" class="hidden">
-        <img id="img-jotaro" src="/jojoimages/2.png" alt="Jotaro Kujo" class="hidden">
-        <img id="img-josuke" src="/jojoimages/3.png" alt="Josuke Higashikata" class="hidden">
-        <img id="img-giorno" src="/jojoimages/4.png" alt="Giorno Giovanna" class="hidden">
-        <img id="img-jolyne" src="/jojoimages/5.png" alt="Jolyne Cujo" class="hidden">
-        <img id="img-dio" src="/jojoimages/6.png" alt="DIO Brando" class="hidden">
-        
-
-        <span id="placeholder-text" style="color: #aaa; font-style: italic; padding: 10px;">
-          [ Espacio reservado para tu ilustración ]
-        </span>
-      </div>
-      <!-- ================================================================= -->
-
-      <p class="result-description" id="character-desc"></p>
-
-      <button class="btn-reset" onclick="resetQuiz()">Volver a intentar</button>
-    </div>
-  </div>
-
-  <script>
-    /* ===================================================
-       DATOS DE PREGUNTAS Y PERSONAJES
-       =================================================== */
-    const questions = [
-      {
-        question: "1. ¿Cómo reaccionas cuando alguien te insulta o te desafía?",
-        options: [
-          { text: "Mantengo la educación, pero defenderé el honor con mis puños si es necesario.", type: "jonathan" },
-          { text: "Me burlo de él y le adivino lo que va a decir a continuación.", type: "joseph" },
-          { text: "Le digo 'Yare Yare Dawa' / 'Yare Yare Daze' y le doy una paliza sin hablar mucho.", type: "jotaro" },
-          { text: "Si se mete con mi estilo o mis amigos, perderé el control por completo.", type: "josuke" },
-          { text: "Analizo la situación en silencio y ejecuto una solución drástica pero justa.", type: "giorno" },
-          { text: "Afronto el problema de cara con determinación indomable y astucia.", type: "jolyne" },
-          { text: "Demuestro mi abrumadora superioridad; no son más que simples insectos.", type: "dio" }
-        ]
-      },
-      {
-        question: "2. ¿Cuál es tu filosofía sobre el destino?",
-        options: [
-          { text: "El destino premia a las almas nobles y de corazón puro.", type: "jonathan" },
-          { text: "El destino se puede engatusar si sabes cómo improvisar a tiempo.", type: "joseph" },
-          { text: "No me importa el destino, solo hago lo que creo que es correcto.", type: "jotaro" },
-          { text: "El destino es proteger a mi pueblo y a la gente que me importa.", type: "josuke" },
-          { text: "Tengo un sueño y el destino servirá a mi voluntad de justicia.", type: "giorno" },
-          { text: "Me libero de las cadenas de la fatalidad rompiendo las reglas.", type: "jolyne" },
-          { text: "Yo estoy por encima del destino. El mundo entero me pertenece.", type: "dio" }
-        ]
-      },
-      {
-        question: "3. ¿Qué valoras más en una batalla o conflicto?",
-        options: [
-          { text: "El honor, el coraje y la dignidad.", type: "jonathan" },
-          { text: "Los trucos, las trampas e ir un paso por delante.", type: "joseph" },
-          { text: "La fuerza bruta combinada con una precisión implacable.", type: "jotaro" },
-          { text: "La capacidad de reparar lo dañado y proteger la paz.", type: "josuke" },
-          { text: "La resolución inquebrantable para cambiar el mundo.", type: "giorno" },
-          { text: "La adaptabilidad y la capacidad de sobrevivir en el caos.", type: "jolyne" },
-          { text: "El poder absoluto y el dominio total sobre el tiempo/espacio.", type: "dio" }
-        ]
-      },
-      {
-        question: "4. En tu grupo de amigos, ¿qué rol sueles ocupar?",
-        options: [
-          { text: "El caballero protector y moralmente intachable.", type: "jonathan" },
-          { text: "El gracioso e impredecible que siempre tiene un plan estrafalario.", type: "joseph" },
-          { text: "El líder callado que solo habla cuando tiene algo importante que decir.", type: "jotaro" },
-          { text: "El amigo leal que siempre está listo para salir a divertirse.", type: "josuke" },
-          { text: "La mente maestra apasionada con un objetivo claro.", type: "giorno" },
-          { text: "El espíritu rebelde que no se deja pisotear por nadie.", type: "jolyne" },
-          { text: "El líder carismático supremo al que todos deben rendir culto.", type: "dio" }
-        ]
+      :root {
+        --bg-color: #1a0826;
+        --card-bg: #2a0e3f;
+        --accent-yellow: #ffe600;
+        --accent-pink: #ff007f;
+        --accent-purple: #8a2be2;
+        --text-color: #ffffff;
+        --font-title: "Bangers", cursive;
+        --font-body: "Montserrat", sans-serif;
       }
-    ];
 
-    const characters = {
-      jonathan: {
-        name: "Jonathan Joestar",
-        desc: "¡Un verdadero caballero! Posees un corazón de oro puro y una determinación inquebrantable. Tu sentido del honor y la justicia te convierten en una persona profundamente respetable que nunca se rinde ante el mal."
-      },
-      joseph: {
-        name: "Joseph Joestar",
-        desc: "¡Tu siguiente frase es: '¿Cómo supo que yo era así?!' Eres ingenioso, astuto, cómico e impredecible. Siempre encuentras la salida más creativa hasta de las situaciones más imposibles."
-      },
-      jotaro: {
-        name: "Jotaro Kujo",
-        desc: "Yare Yare Daze... Pareces frío, distante y de pocas palabras, pero en el fondo posees una lealtad feroz por tus seres queridos y una serenidad implacable ante el peligro."
-      },
-      josuke: {
-        name: "Josuke Higashikata",
-        desc: "¡Gureto daze! Eres amigable, alegre y muy protector con tus seres queridos (¡y con tu cabello!). Tienes un corazón generoso y siempre estás dispuesto a sanar y ayudar a tu entorno."
-      },
-      giorno: {
-        name: "Giorno Giovanna",
-        desc: "Tienes un sueño y la resolución absoluta para cumplirlo. Combinas una mente analítica y calmada con una pasión desbordante por la justicia."
-      },
-      jolyne: {
-        name: "Jolyne Cujo",
-        desc: "Rebelde, audaz e independiente. Posees una fuerza mental formidable que te permite adaptarte a cualquier adversidad y liberarte de cualquier atadura."
-      },
-      dio: {
-        name: "¡DIO! (El camino secreto)",
-        desc: "¡WRYYYY! Has rechazado la humanidad de este test para tomar el camino de la dominación. Posees una ambición desmedida, un carisma arrollador y una sed insaciable de poder. ¡El mundo es tuyo!"
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
-    };
 
-    /* ===================================================
-       LÓGICA DEL TEST Y LOCALSTORAGE
-       =================================================== */
-    let currentQuestionIndex = 0;
-    let scores = {
-      jonathan: 0,
-      joseph: 0,
-      jotaro: 0,
-      josuke: 0,
-      giorno: 0,
-      jolyne: 0,
-      dio: 0
-    };
-
-    // Referencias al DOM
-    const quizScreen = document.getElementById('quiz-screen');
-    const resultScreen = document.getElementById('result-screen');
-    const questionText = document.getElementById('question-text');
-    const optionsContainer = document.getElementById('options-container');
-    const progressBar = document.getElementById('progress-bar');
-
-    // Función auxiliar para mezclar (randomizar) arrays (Algoritmo Fisher-Yates)
-    function shuffleArray(array) {
-      const shuffled = [...array];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: var(--font-body);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-image:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(255, 0, 127, 0.15) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(255, 230, 0, 0.15) 0%,
+            transparent 40%
+          );
+        padding: 20px;
       }
-      return shuffled;
-    }
 
-    // Comprobar si ya existe un resultado guardado al cargar la página
-    window.onload = function() {
-      const savedResult = localStorage.getItem('jojo_quiz_result');
-      if (savedResult) {
-        showResult(savedResult, true);
-      } else {
-        loadQuestion();
+      .container {
+        background: var(--card-bg);
+        border: 4px solid var(--accent-yellow);
+        box-shadow: 10px 10px 0px var(--accent-pink);
+        border-radius: 12px;
+        width: 100%;
+        max-width: 650px;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
       }
-    };
 
-    function loadQuestion() {
-      const q = questions[currentQuestionIndex];
-      questionText.innerText = q.question;
-      optionsContainer.innerHTML = '';
-
-      // Actualizar barra de progreso
-      const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
-      progressBar.style.width = `${progressPercent}%`;
-
-      // Mezclamos las opciones de la pregunta actual para que salgan en orden aleatorio
-      const shuffledOptions = shuffleArray(q.options);
-
-      // Renderizar opciones mezcladas
-      shuffledOptions.forEach(option => {
-        const btn = document.createElement('button');
-        btn.className = 'btn-option';
-        btn.innerText = option.text;
-        btn.onclick = () => selectOption(option.type);
-        optionsContainer.appendChild(btn);
-      });
-    }
-
-    function selectOption(type) {
-      scores[type]++;
-      currentQuestionIndex++;
-
-      if (currentQuestionIndex < questions.length) {
-        loadQuestion();
-      } else {
-        calculateAndShowResult();
+      h1 {
+        font-family: var(--font-title);
+        font-size: 2.8rem;
+        letter-spacing: 2px;
+        color: var(--accent-yellow);
+        text-shadow: 3px 3px 0px var(--accent-pink);
+        margin-bottom: 10px;
+        text-transform: uppercase;
       }
-    }
 
-    function calculateAndShowResult() {
-      progressBar.style.width = '100%';
+      p.subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+        color: #ddd;
+      }
 
-      // Determinar el personaje con más puntos
-      let winner = 'jonathan';
-      let maxScore = -1;
+      /* Barra de progreso */
+      .progress-bar-container {
+        width: 100%;
+        height: 12px;
+        background-color: #11031b;
+        border-radius: 6px;
+        margin-bottom: 25px;
+        overflow: hidden;
+        border: 1px solid var(--accent-yellow);
+      }
 
-      for (const [char, score] of Object.entries(scores)) {
-        if (score > maxScore) {
-          maxScore = score;
-          winner = char;
+      .progress-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(
+          90deg,
+          var(--accent-pink),
+          var(--accent-yellow)
+        );
+        transition: width 0.4s ease;
+      }
+
+      /* Preguntas y Opciones */
+      .question-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .options-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .btn-option {
+        background: #11031b;
+        color: #fff;
+        border: 2px solid var(--accent-purple);
+        padding: 14px 20px;
+        font-size: 1rem;
+        font-family: var(--font-body);
+        font-weight: 700;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: left;
+      }
+
+      .btn-option:hover {
+        background-color: var(--accent-purple);
+        border-color: var(--accent-yellow);
+        transform: translateX(5px);
+        box-shadow: -4px 4px 0px var(--accent-pink);
+      }
+
+      /* Pantalla de Resultado */
+      .result-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        animation: fadeIn 0.8s ease-in-out;
+      }
+
+      .result-title {
+        font-family: var(--font-title);
+        font-size: 3rem;
+        color: var(--accent-yellow);
+        text-shadow: 4px 4px 0px var(--accent-pink);
+        margin: 15px 0;
+      }
+
+      /* Estilo especial para el camino secreto: DIO */
+      .result-card.dio .result-title {
+        color: #ff0000;
+        text-shadow: 4px 4px 0px #000;
+      }
+
+      /* Contenedor de las imágenes */
+      .character-image-container {
+        width: 100%;
+        max-width: 320px;
+        height: 250px;
+        border: 3px dashed var(--accent-yellow);
+        border-radius: 8px;
+        margin: 15px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .character-image-container img {
+        width: 70%;
+        height: 100%;
+        object-fit: cover;
+        filter: drop-shadow(2px 0 0 var(--accent-yellow))
+          drop-shadow(-2px 0 0 var(--accent-yellow))
+          drop-shadow(0 2px 0 var(--accent-yellow))
+          drop-shadow(0 -2px 0 var(--accent-yellow));
+      }
+
+      .result-description {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin-bottom: 25px;
+        text-align: justify;
+      }
+
+      .btn-reset {
+        background: var(--accent-pink);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        font-family: var(--font-title);
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+        border-radius: 6px;
+        cursor: pointer;
+        box-shadow: 3px 3px 0px var(--accent-yellow);
+        transition: transform 0.1s;
+      }
+
+      .btn-reset:hover {
+        transform: scale(1.05);
+      }
+
+      .menacing-text {
+        position: absolute;
+        font-family: var(--font-title);
+        font-size: 2rem;
+        color: rgba(255, 0, 127, 0.2);
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .m-1 {
+        top: 10px;
+        left: 15px;
+      }
+      .m-2 {
+        bottom: 10px;
+        right: 15px;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
       }
 
-      // Guardar en localStorage
-      localStorage.setItem('jojo_quiz_result', winner);
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <span class="menacing-text m-1">ゴゴゴ</span>
+      <span class="menacing-text m-2">ゴゴゴ</span>
 
-      showResult(winner, false);
-    }
+      <!-- PANTALLA DEL TEST -->
+      <div id="quiz-screen">
+        <h1>¿Qué JoJo Eres?</h1>
+        <p class="subtitle">
+          Descubre el linaje o el destino que guía tu espíritu de lucha
+        </p>
 
-    function showResult(characterKey, isSaved) {
-      quizScreen.classList.add('hidden');
-      resultScreen.classList.remove('hidden');
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
 
-      const character = characters[characterKey];
-      document.getElementById('character-name').innerText = character.name;
-      document.getElementById('character-desc').innerText = character.desc;
+        <div class="question-title" id="question-text">
+          Cargando pregunta...
+        </div>
 
-      // Aplicar estilo alternativo si te tocó DIO (El camino secreto)
-      if (characterKey === 'dio') {
-        resultScreen.classList.add('dio');
-      } else {
-        resultScreen.classList.remove('dio');
+        <div class="options-grid" id="options-container">
+          <!-- Opciones generadas por JS -->
+        </div>
+      </div>
+
+      <!-- PANTALLA DE RESULTADOS -->
+      <div id="result-screen" class="result-card hidden">
+        <p
+          style="
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-pink);
+            font-weight: bold;
+          "
+        >
+          Tu destino ha sido revelado
+        </p>
+
+        <h2 class="result-title" id="character-name">NOMBRE PERSONAJE</h2>
+
+        <div class="character-image-container" id="image-box">
+          <img
+            id="img-jonathan"
+            src="/jojoimages/1.png"
+            alt="Jonathan Joestar"
+            class="hidden"
+          />
+          <img
+            id="img-joseph"
+            src="/jojoimages/2.png"
+            alt="Joseph Joestar"
+            class="hidden"
+          />
+          <img
+            id="img-jotaro"
+            src="/jojoimages/3.png"
+            alt="Jotaro Kujo"
+            class="hidden"
+          />
+          <img
+            id="img-josuke"
+            src="/jojoimages/4.png"
+            alt="Josuke Higashikata"
+            class="hidden"
+          />
+          <img
+            id="img-giorno"
+            src="/jojoimages/5.png"
+            alt="Giorno Giovanna"
+            class="hidden"
+          />
+          <img
+            id="img-jolyne"
+            src="/jojoimages/6.png"
+            alt="Jolyne Cujo"
+            class="hidden"
+          />
+          <img
+            id="img-dio"
+            src="/jojoimages/0.png"
+            alt="DIO Brando"
+            class="hidden"
+          />
+        </div>
+
+        <p class="result-description" id="character-desc"></p>
+
+        <button class="btn-reset" onclick="resetQuiz()">
+          Volver a intentar
+        </button>
+      </div>
+    </div>
+
+    <script>
+      /* ===================================================
+       DATOS DE PREGUNTAS Y PERSONAJES
+       =================================================== */
+      const questions = [
+        {
+          question:
+            "1. ¿Cómo reaccionas cuando alguien te insulta o te desafía?",
+          options: [
+            {
+              text: "Mantengo la educación, pero defenderé el honor con mis puños si es necesario.",
+              type: "jonathan",
+            },
+            {
+              text: "Me burlo de él y le adivino lo que va a decir a continuación.",
+              type: "joseph",
+            },
+            {
+              text: "Le digo 'Yare Yare Dawa' / 'Yare Yare Daze' y le doy una paliza sin hablar mucho.",
+              type: "jotaro",
+            },
+            {
+              text: "Si se mete con mi estilo o mis amigos, perderé el control por completo.",
+              type: "josuke",
+            },
+            {
+              text: "Analizo la situación en silencio y ejecuto una solución drástica pero justa.",
+              type: "giorno",
+            },
+            {
+              text: "Afronto el problema de cara con determinación indomable y astucia.",
+              type: "jolyne",
+            },
+            {
+              text: "Demuestro mi abrumadora superioridad; no son más que simples insectos.",
+              type: "dio",
+            },
+          ],
+        },
+        {
+          question: "2. ¿Cuál es tu filosofía sobre el destino?",
+          options: [
+            {
+              text: "El destino premia a las almas nobles y de corazón puro.",
+              type: "jonathan",
+            },
+            {
+              text: "El destino se puede engatusar si sabes cómo improvisar a tiempo.",
+              type: "joseph",
+            },
+            {
+              text: "No me importa el destino, solo hago lo que creo que es correcto.",
+              type: "jotaro",
+            },
+            {
+              text: "El destino es proteger a mi pueblo y a la gente que me importa.",
+              type: "josuke",
+            },
+            {
+              text: "Tengo un sueño y el destino servirá a mi voluntad de justicia.",
+              type: "giorno",
+            },
+            {
+              text: "Me libero de las cadenas de la fatalidad rompiendo las reglas.",
+              type: "jolyne",
+            },
+            {
+              text: "Yo estoy por encima del destino. El mundo entero me pertenece.",
+              type: "dio",
+            },
+          ],
+        },
+        {
+          question: "3. ¿Qué valoras más en una batalla o conflicto?",
+          options: [
+            { text: "El honor, el coraje y la dignidad.", type: "jonathan" },
+            {
+              text: "Los trucos, las trampas e ir un paso por delante.",
+              type: "joseph",
+            },
+            {
+              text: "La fuerza bruta combinada con una precisión implacable.",
+              type: "jotaro",
+            },
+            {
+              text: "La capacidad de reparar lo dañado y proteger la paz.",
+              type: "josuke",
+            },
+            {
+              text: "La resolución inquebrantable para cambiar el mundo.",
+              type: "giorno",
+            },
+            {
+              text: "La adaptabilidad y la capacidad de sobrevivir en el caos.",
+              type: "jolyne",
+            },
+            {
+              text: "El poder absoluto y el dominio total sobre el tiempo/espacio.",
+              type: "dio",
+            },
+          ],
+        },
+        {
+          question: "4. En tu grupo de amigos, ¿qué rol sueles ocupar?",
+          options: [
+            {
+              text: "El caballero protector y moralmente intachable.",
+              type: "jonathan",
+            },
+            {
+              text: "El gracioso e impredecible que siempre tiene un plan estrafalario.",
+              type: "joseph",
+            },
+            {
+              text: "El líder callado que solo habla cuando tiene algo importante que decir.",
+              type: "jotaro",
+            },
+            {
+              text: "El amigo leal que siempre está listo para salir a divertirse.",
+              type: "josuke",
+            },
+            {
+              text: "La mente maestra apasionada con un objetivo claro.",
+              type: "giorno",
+            },
+            {
+              text: "El espíritu rebelde que no se deja pisotear por nadie.",
+              type: "jolyne",
+            },
+            {
+              text: "El líder carismático supremo al que todos deben rendir culto.",
+              type: "dio",
+            },
+          ],
+        },
+      ];
+
+      const characters = {
+        jonathan: {
+          name: "Jonathan Joestar",
+          desc: "¡Un verdadero caballero! Posees un corazón de oro puro y una determinación inquebrantable. Tu sentido del honor y la justicia te convierten en una persona profundamente respetable que nunca se rinde ante el mal.",
+        },
+        joseph: {
+          name: "Joseph Joestar",
+          desc: "¡Tu siguiente frase es: '¿Cómo supo que yo era así?!' Eres ingenioso, astuto, cómico e impredecible. Siempre encuentras la salida más creativa hasta de las situaciones más imposibles.",
+        },
+        jotaro: {
+          name: "Jotaro Kujo",
+          desc: "Yare Yare Daze... Pareces frío, distante y de pocas palabras, pero en el fondo posees una lealtad feroz por tus seres queridos y una serenidad implacable ante el peligro.",
+        },
+        josuke: {
+          name: "Josuke Higashikata",
+          desc: "¡Gureto daze! Eres amigable, alegre y muy protector con tus seres queridos (¡y con tu cabello!). Tienes un corazón generoso y siempre estás dispuesto a sanar y ayudar a tu entorno.",
+        },
+        giorno: {
+          name: "Giorno Giovanna",
+          desc: "Tienes un sueño y la resolución absoluta para cumplirlo. Combinas una mente analítica y calmada con una pasión desbordante por la justicia.",
+        },
+        jolyne: {
+          name: "Jolyne Cujo",
+          desc: "Rebelde, audaz e independiente. Posees una fuerza mental formidable que te permite adaptarte a cualquier adversidad y liberarte de cualquier atadura.",
+        },
+        dio: {
+          name: "¡DIO! (El camino secreto)",
+          desc: "¡WRYYYY! Has rechazado la humanidad de este test para tomar el camino de la dominación. Posees una ambición desmedida, un carisma arrollador y una sed insaciable de poder. ¡El mundo es tuyo!",
+        },
+      };
+
+      /* ===================================================
+       LÓGICA DEL TEST Y LOCALSTORAGE
+       =================================================== */
+      let currentQuestionIndex = 0;
+      let scores = {
+        jonathan: 0,
+        joseph: 0,
+        jotaro: 0,
+        josuke: 0,
+        giorno: 0,
+        jolyne: 0,
+        dio: 0,
+      };
+
+      // Referencias al DOM
+      const quizScreen = document.getElementById("quiz-screen");
+      const resultScreen = document.getElementById("result-screen");
+      const questionText = document.getElementById("question-text");
+      const optionsContainer = document.getElementById("options-container");
+      const progressBar = document.getElementById("progress-bar");
+
+      // Función auxiliar para mezclar (randomizar) arrays
+      function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
       }
 
-      /* 
-         Si añades tus propias imágenes en el HTML, puedes descommentar 
-         esta lógica para mostrarlas automáticamente según el resultado:
-         
-         document.querySelectorAll('.character-image-container img').forEach(img => img.classList.add('hidden'));
-         const activeImg = document.getElementById(`img-${characterKey}`);
-         if (activeImg) {
-           activeImg.classList.remove('hidden');
-           document.getElementById('placeholder-text').style.display = 'none';
-         }
-      */
-    }
+      // Comprobar si ya existe un resultado guardado al cargar la página
+      window.onload = function () {
+        const savedResult = localStorage.getItem("jojo_quiz_result");
+        if (savedResult) {
+          showResult(savedResult, true);
+        } else {
+          loadQuestion();
+        }
+      };
 
-    function resetQuiz() {
-      // Eliminar el resultado guardado de localStorage
-      localStorage.removeItem('jojo_quiz_result');
-      
-      // Reiniciar estado
-      currentQuestionIndex = 0;
-      scores = { jonathan: 0, joseph: 0, jotaro: 0, josuke: 0, giorno: 0, jolyne: 0, dio: 0 };
+      function loadQuestion() {
+        const q = questions[currentQuestionIndex];
+        questionText.innerText = q.question;
+        optionsContainer.innerHTML = "";
 
-      // Ocultar resultados y mostrar el quiz
-      resultScreen.classList.add('hidden');
-      quizScreen.classList.remove('hidden');
-      
-      loadQuestion();
-    }
-  </script>
-</body>
+        // Actualizar barra de progreso
+        const progressPercent = (currentQuestionIndex / questions.length) * 100;
+        progressBar.style.width = `${progressPercent}%`;
+
+        // Mezclamos las opciones
+        const shuffledOptions = shuffleArray(q.options);
+
+        // Renderizar opciones
+        shuffledOptions.forEach((option) => {
+          const btn = document.createElement("button");
+          btn.className = "btn-option";
+          btn.innerText = option.text;
+          btn.onclick = () => selectOption(option.type);
+          optionsContainer.appendChild(btn);
+        });
+      }
+
+      function selectOption(type) {
+        scores[type]++;
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex < questions.length) {
+          loadQuestion();
+        } else {
+          calculateAndShowResult();
+        }
+      }
+
+      function calculateAndShowResult() {
+        progressBar.style.width = "100%";
+
+        // Determinar el personaje con más puntos
+        let winner = "jonathan";
+        let maxScore = -1;
+
+        for (const [char, score] of Object.entries(scores)) {
+          if (score > maxScore) {
+            maxScore = score;
+            winner = char;
+          }
+        }
+
+        // Guardar en localStorage
+        localStorage.setItem("jojo_quiz_result", winner);
+
+        showResult(winner, false);
+      }
+
+      function showResult(characterKey, isSaved) {
+        quizScreen.classList.add("hidden");
+        resultScreen.classList.remove("hidden");
+
+        const character = characters[characterKey];
+        document.getElementById("character-name").innerText = character.name;
+        document.getElementById("character-desc").innerText = character.desc;
+
+        // Estilo especial para DIO
+        if (characterKey === "dio") {
+          resultScreen.classList.add("dio");
+        } else {
+          resultScreen.classList.remove("dio");
+        }
+
+        // 1. Ocultamos todas las imágenes de personajes
+        document
+          .querySelectorAll(".character-image-container img")
+          .forEach((img) => img.classList.add("hidden"));
+
+        // 2. Buscamos y mostramos la imagen correspondiente al resultado
+        const activeImg = document.getElementById(`img-${characterKey}`);
+        if (activeImg) {
+          activeImg.classList.remove("hidden");
+        }
+      }
+
+      function resetQuiz() {
+        localStorage.removeItem("jojo_quiz_result");
+
+        currentQuestionIndex = 0;
+        scores = {
+          jonathan: 0,
+          joseph: 0,
+          jotaro: 0,
+          josuke: 0,
+          giorno: 0,
+          jolyne: 0,
+          dio: 0,
+        };
+
+        resultScreen.classList.add("hidden");
+        quizScreen.classList.remove("hidden");
+
+        loadQuestion();
+      }
+    </script>
+  </body>
 </html>
